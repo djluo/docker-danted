@@ -1,0 +1,21 @@
+# vim:set et ts=2 sw=2 syntax=dockerfile:
+
+FROM       docker.xlands-inc.com/baoyu/debian
+MAINTAINER djluo <dj.luo@baoyugame.com>
+
+ADD ./dante.list /etc/apt/sources.list.d/dante.list
+RUN export http_proxy="http://172.17.42.1:8080/" \
+    && export DEBIAN_FRONTEND=noninteractive     \
+    && apt-get update \
+    && apt-get install -y debhelper quilt libtool    \
+                          autotools-dev libwrap0-dev \
+                          libpam0g-dev flex
+
+RUN gpg --keyserver subkeys.pgp.net --recv 1EE8660B   \
+    && gpg --export --armor 1EE8660B | apt-key add  - \
+    && apt-get update \
+    && apt-get install dpkg-dev
+
+VOLUME  /build/
+WORKDIR /build/
+CMD     ["apt-get", "-b", "source", "dante" ]
