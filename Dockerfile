@@ -1,3 +1,4 @@
+# vim:set et ts=2 sw=2 syntax=dockerfile:
 FROM docker.xlands-inc.com/baoyu/debian
 MAINTAINER djluo <dj.luo@baoyugame.com>
 
