@@ -5,7 +5,7 @@ MAINTAINER djluo <dj.luo@baoyugame.com>
 RUN export http_proxy="http://172.17.42.1:8080/" \
     && export DEBIAN_FRONTEND=noninteractive     \
     && apt-get update \
-    && apt-get install -y libwrap0 \
+    && apt-get install -y libwrap0 db-util \
     && apt-get clean \
     && url="http://172.17.42.1:8080/dante/dante-server_1.4.1-1_amd64.deb" \
     && curl -sLo  /dante.deb $url \

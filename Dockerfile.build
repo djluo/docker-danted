@@ -4,17 +4,19 @@ FROM       docker.xlands-inc.com/baoyu/debian
 MAINTAINER djluo <dj.luo@baoyugame.com>
 
 ADD ./dante.list /etc/apt/sources.list.d/dante.list
+
+RUN gpg --keyserver subkeys.pgp.net --recv 1EE8660B \
+    && gpg --export --armor 1EE8660B | apt-key add -
+
 RUN export http_proxy="http://172.17.42.1:8080/" \
     && export DEBIAN_FRONTEND=noninteractive     \
     && apt-get update \
-    && apt-get install -y debhelper quilt libtool    \
-                          autotools-dev libwrap0-dev \
-                          libpam0g-dev flex
-
-RUN gpg --keyserver subkeys.pgp.net --recv 1EE8660B   \
-    && gpg --export --armor 1EE8660B | apt-key add  - \
+    && apt-get install -y debhelper quilt libtool-bin \
+                          autotools-dev libwrap0-dev  \
+                          libpam0g-dev flex \
     && apt-get update \
-    && apt-get install dpkg-dev
+    && apt-get install dpkg-dev \
+    && apt-get clean
 
 VOLUME  /build/
 WORKDIR /build/
