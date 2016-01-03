@@ -18,7 +18,10 @@ RUN export http_proxy="http://172.17.42.1:8080/" \
     && /bin/rm -rf /usr/share/man/man8/danted.8.gz \
     && /bin/rm -rf /usr/share/man/man5/danted.conf.5.gz
 
-ADD ./entrypoint.pl      /entrypoint.pl
+COPY ./entrypoint.pl      /entrypoint.pl
+COPY ./conf/danted.pam    /etc/pam.d/danted
+COPY ./conf/danted.conf   /etc/danted-example.conf
+COPY ./bin/add-user       /usr/bin/add-user
 
 ENTRYPOINT ["/entrypoint.pl"]
-CMD        ["/usr/sbin/danted"]
+CMD        ["/usr/sbin/danted", "-f", "/etc/danted/danted.conf"]

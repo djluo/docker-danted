@@ -29,6 +29,10 @@ sub add_user {
 unless (getpwuid("$uid")){
   add_user("docker",  "$uid");
 }
+my $conf="/etc/danted/danted.conf";
+unless ( -f "$conf"){
+  system("cp", "-a", "/etc/danted-example.conf", "$conf");
+}
 
 # 切换当前运行用户,先切GID.
 #$GID = $EGID = $gid;

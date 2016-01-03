@@ -19,17 +19,22 @@ images="${registry}/baoyu/danted"
 #default_port="172.17.42.1:3306:3306"
 
 action="$1"    # start or stop ...
-_get_uid "$2"  # uid=xxxx ,default is "1000"
-shift $flag_shift
-unset  flag_shift
+if [ "x$action" == "xexec" ];then
+  shift
+  exec_cmd=$@
+else
+  _get_uid "$2"  # uid=xxxx ,default is "1000"
+  shift $flag_shift
+  unset  flag_shift
 
-# 转换需映射的端口号
-app_port="$@"  # hostPort
-app_port=${app_port:=${default_port}}
-_port
+  # 转换需映射的端口号
+  app_port="$@"  # hostPort
+  app_port=${app_port:=${default_port}}
+  _port
+fi
 
 _run() {
-  local mode="-d"
+  local mode="-d --restart=always"
   local name="$container_name"
   local cmd=""
 
@@ -39,8 +44,8 @@ _run() {
     -e "TZ=Asia/Shanghai"     \
     -e "User_Id=${User_Id}"   \
     $volume    \
-    -v ${current_dir}/danted.conf:/etc/danted.conf   \
-    -v ${current_dir}/logs/:/logs/   \
+    -v ${current_dir}/logs/:/logs/ \
+    -v ${current_dir}/conf/:/etc/danted/ \
     --name ${name} ${images} \
     $cmd
 }
